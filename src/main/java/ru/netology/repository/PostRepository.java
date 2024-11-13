@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 // Stub
-@Repository
+
 public class PostRepository {
     private final List<Post> posts = new ArrayList<>();
 
