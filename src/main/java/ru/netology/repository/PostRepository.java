@@ -1,5 +1,6 @@
 package ru.netology.repository;
 
+import org.springframework.stereotype.Repository;
 import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
 
@@ -13,38 +14,41 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 // Stub
+
 public class PostRepository {
-  private final List<Post> posts = new ArrayList<>();
+    private final List<Post> posts = new ArrayList<>();
 
-  public synchronized List<Post> all() {
-    return posts;
-  }
+    public synchronized List<Post> all() {
+        return posts;
+    }
 
-  public synchronized Optional<Post> getById(long id) {
-    return posts.stream()
-            .filter(a->a.getId() == id)
-            .findAny();
-  }
+    public synchronized Optional<Post> getById(long id) {
+        return posts.stream()
+                .filter(a -> a.getId() == id)
+                .findAny();
+    }
 
-  public synchronized Post save(Post post) {
-    for (Post post1 : posts){
-      if(post1.getId() == post.getId()) {
-        post1.setContent(post.getContent());
+    public synchronized Post save(Post post) {
+        if(posts.isEmpty()){
+            posts.add(post);
+            return post;
+        }
+        for (Post post1 : posts) {
+            if (post1.getId() == post.getId()) {
+                post1.setContent(post.getContent());
+                return post;
+            }
+        }
+        posts.add(post);
         return post;
-      }else {
-        throw new NotFoundException("The object was not found by ID = " + post.getId());
-      }
     }
-    posts.add(post);
-    return post;
-  }
 
-  public synchronized void removeById(long id) {
-    for (Post post1 : posts){
-      if(post1.getId() == id) {
-        posts.remove(post1);
-        return;
-      }
+    public synchronized void removeById(long id) {
+        for (Post post1 : posts) {
+            if (post1.getId() == id) {
+                posts.remove(post1);
+                return;
+            }
+        }
     }
-  }
 }
